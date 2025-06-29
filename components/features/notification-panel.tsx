@@ -119,9 +119,11 @@ export function NotificationPanel() {
 
         {notifications.length > 0 && (
           <div className="p-4 border-t">
-            <Button variant="outline" className="w-full" size="sm">
-              View All Notifications
-            </Button>
+            <Link href="/notifications" legacyBehavior passHref>
+              <Button asChild variant="outline" className="w-full" size="sm">
+                <a>View All Notifications</a>
+              </Button>
+            </Link>
           </div>
         )}
       </DropdownMenuContent>

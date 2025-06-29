@@ -16,12 +16,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Home, Files, Share, Shield, Settings, User, Search, Menu, LogOut, Moon, Sun, Upload } from "lucide-react"
+import { Home, Files, Share, Settings, User, Search, Menu, LogOut, Bell } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
-import { useTheme } from "@/contexts/theme-context"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { NotificationPanel } from "@/components/features/notification-panel"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -31,14 +31,13 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Files", href: "/files", icon: Files },
   { name: "Shared", href: "/shared", icon: Share },
-  { name: "Security", href: "/security", icon: Shield },
+  { name: "Notifications", href: "/notifications", icon: Bell },
   { name: "Settings", href: "/settings", icon: Settings },
 ]
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { user, logout } = useAuth()
-  const { theme, toggleTheme } = useTheme()
   const router = useRouter()
   const pathname = usePathname()
 
@@ -84,9 +83,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Right side */}
           <div className="flex items-center gap-x-4 lg:gap-x-6">
             {/* Theme toggle */}
-            <Button variant="ghost" size="sm" onClick={toggleTheme}>
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
+            <ThemeToggle />
 
             {/* Notifications */}
             <NotificationPanel />
@@ -110,7 +107,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/profile">
+                  <Link href="/settings">
                     <User className="mr-2 h-4 w-4" />
                     Profile
                   </Link>
@@ -145,7 +142,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex h-16 shrink-0 items-center">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
-              <Shield className="h-5 w-5 text-white" />
+              <Home className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900 dark:text-white">SecureTransfer</span>
           </div>
@@ -174,12 +171,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 })}
               </ul>
             </li>
-            <li className="mt-auto">
-              <Button className="w-full" size="sm">
-                <Upload className="mr-2 h-4 w-4" />
-                Upload Files
-              </Button>
-            </li>
+            <li className="mt-auto"></li>
           </ul>
         </nav>
       </div>

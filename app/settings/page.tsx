@@ -16,7 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { User, Bell, HardDrive, Shield, Download, Camera, Save, Trash, AlertTriangle } from "lucide-react"
+import { User, HardDrive, Shield, Download, Camera, Save, Trash, AlertTriangle } from "lucide-react"
 import { toast } from "sonner"
 
 export default function SettingsPage() {
@@ -27,32 +27,14 @@ export default function SettingsPage() {
 
   // Profile settings
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    bio: "Software developer passionate about security and privacy.",
-    avatar: "/placeholder.svg?height=100&width=100",
-    timezone: "America/New_York",
-    language: "en",
+    name: "",
+    email: "",
+    bio: "",
+    avatar: "",
+    language: "",
+    timezone: "",
   })
 
-  // Notification settings
-  const [notifications, setNotifications] = useState({
-    emailNotifications: true,
-    pushNotifications: true,
-    fileShared: true,
-    fileDownloaded: true,
-    securityAlerts: true,
-    weeklyDigest: false,
-    marketingEmails: false,
-  })
-
-  // Privacy settings
-  const [privacy, setPrivacy] = useState({
-    profileVisibility: "private",
-    allowFileSharing: true,
-    showOnlineStatus: false,
-    dataRetention: "1year",
-  })
 
   // Storage settings
   const [storage, setStorage] = useState({
@@ -81,30 +63,6 @@ export default function SettingsPage() {
       toast.success("Profile updated successfully!")
     } catch (error) {
       toast.error("Failed to update profile")
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  const handleSaveNotifications = async () => {
-    setIsSaving(true)
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      toast.success("Notification preferences updated!")
-    } catch (error) {
-      toast.error("Failed to update notifications")
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  const handleSavePrivacy = async () => {
-    setIsSaving(true)
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      toast.success("Privacy settings updated!")
-    } catch (error) {
-      toast.error("Failed to update privacy settings")
     } finally {
       setIsSaving(false)
     }
@@ -155,18 +113,10 @@ export default function SettingsPage() {
               </div>
 
               <Tabs defaultValue="profile" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-5">
+                <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="profile" className="flex items-center gap-2">
                     <User className="w-4 h-4" />
                     Profile
-                  </TabsTrigger>
-                  <TabsTrigger value="notifications" className="flex items-center gap-2">
-                    <Bell className="w-4 h-4" />
-                    Notifications
-                  </TabsTrigger>
-                  <TabsTrigger value="privacy" className="flex items-center gap-2">
-                    <Shield className="w-4 h-4" />
-                    Privacy
                   </TabsTrigger>
                   <TabsTrigger value="storage" className="flex items-center gap-2">
                     <HardDrive className="w-4 h-4" />
@@ -277,203 +227,6 @@ export default function SettingsPage() {
                       <Button onClick={handleSaveProfile} disabled={isSaving}>
                         <Save className="w-4 h-4 mr-2" />
                         {isSaving ? "Saving..." : "Save Changes"}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                {/* Notifications Tab */}
-                <TabsContent value="notifications" className="space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Notification Preferences</CardTitle>
-                      <CardDescription>Choose how you want to be notified about activity</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-0.5">
-                            <Label className="text-base">Email Notifications</Label>
-                            <p className="text-sm text-muted-foreground">Receive notifications via email</p>
-                          </div>
-                          <Switch
-                            checked={notifications.emailNotifications}
-                            onCheckedChange={(checked) =>
-                              setNotifications({ ...notifications, emailNotifications: checked })
-                            }
-                          />
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-0.5">
-                            <Label className="text-base">Push Notifications</Label>
-                            <p className="text-sm text-muted-foreground">Receive push notifications in your browser</p>
-                          </div>
-                          <Switch
-                            checked={notifications.pushNotifications}
-                            onCheckedChange={(checked) =>
-                              setNotifications({ ...notifications, pushNotifications: checked })
-                            }
-                          />
-                        </div>
-
-                        <div className="border-t pt-4">
-                          <h4 className="font-medium mb-4">Activity Notifications</h4>
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                              <div className="space-y-0.5">
-                                <Label className="text-base">File Shared</Label>
-                                <p className="text-sm text-muted-foreground">When someone shares a file with you</p>
-                              </div>
-                              <Switch
-                                checked={notifications.fileShared}
-                                onCheckedChange={(checked) =>
-                                  setNotifications({ ...notifications, fileShared: checked })
-                                }
-                              />
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <div className="space-y-0.5">
-                                <Label className="text-base">File Downloaded</Label>
-                                <p className="text-sm text-muted-foreground">
-                                  When someone downloads your shared files
-                                </p>
-                              </div>
-                              <Switch
-                                checked={notifications.fileDownloaded}
-                                onCheckedChange={(checked) =>
-                                  setNotifications({ ...notifications, fileDownloaded: checked })
-                                }
-                              />
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <div className="space-y-0.5">
-                                <Label className="text-base">Security Alerts</Label>
-                                <p className="text-sm text-muted-foreground">Important security notifications</p>
-                              </div>
-                              <Switch
-                                checked={notifications.securityAlerts}
-                                onCheckedChange={(checked) =>
-                                  setNotifications({ ...notifications, securityAlerts: checked })
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="border-t pt-4">
-                          <h4 className="font-medium mb-4">Email Preferences</h4>
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                              <div className="space-y-0.5">
-                                <Label className="text-base">Weekly Digest</Label>
-                                <p className="text-sm text-muted-foreground">Weekly summary of your activity</p>
-                              </div>
-                              <Switch
-                                checked={notifications.weeklyDigest}
-                                onCheckedChange={(checked) =>
-                                  setNotifications({ ...notifications, weeklyDigest: checked })
-                                }
-                              />
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <div className="space-y-0.5">
-                                <Label className="text-base">Marketing Emails</Label>
-                                <p className="text-sm text-muted-foreground">Product updates and promotional content</p>
-                              </div>
-                              <Switch
-                                checked={notifications.marketingEmails}
-                                onCheckedChange={(checked) =>
-                                  setNotifications({ ...notifications, marketingEmails: checked })
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <Button onClick={handleSaveNotifications} disabled={isSaving}>
-                        <Save className="w-4 h-4 mr-2" />
-                        {isSaving ? "Saving..." : "Save Preferences"}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
-
-                {/* Privacy Tab */}
-                <TabsContent value="privacy" className="space-y-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Privacy Settings</CardTitle>
-                      <CardDescription>Control your privacy and data sharing preferences</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label>Profile Visibility</Label>
-                          <Select
-                            value={privacy.profileVisibility}
-                            onValueChange={(value) => setPrivacy({ ...privacy, profileVisibility: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="public">Public - Anyone can see your profile</SelectItem>
-                              <SelectItem value="private">Private - Only you can see your profile</SelectItem>
-                              <SelectItem value="contacts">Contacts Only - Only people you share files with</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-0.5">
-                            <Label className="text-base">Allow File Sharing</Label>
-                            <p className="text-sm text-muted-foreground">Allow others to share files with you</p>
-                          </div>
-                          <Switch
-                            checked={privacy.allowFileSharing}
-                            onCheckedChange={(checked) => setPrivacy({ ...privacy, allowFileSharing: checked })}
-                          />
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-0.5">
-                            <Label className="text-base">Show Online Status</Label>
-                            <p className="text-sm text-muted-foreground">Let others see when you're online</p>
-                          </div>
-                          <Switch
-                            checked={privacy.showOnlineStatus}
-                            onCheckedChange={(checked) => setPrivacy({ ...privacy, showOnlineStatus: checked })}
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label>Data Retention</Label>
-                          <Select
-                            value={privacy.dataRetention}
-                            onValueChange={(value) => setPrivacy({ ...privacy, dataRetention: value })}
-                          >
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="30days">30 Days</SelectItem>
-                              <SelectItem value="90days">90 Days</SelectItem>
-                              <SelectItem value="1year">1 Year</SelectItem>
-                              <SelectItem value="forever">Forever</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <p className="text-sm text-muted-foreground">How long to keep your deleted files in trash</p>
-                        </div>
-                      </div>
-
-                      <Button onClick={handleSavePrivacy} disabled={isSaving}>
-                        <Save className="w-4 h-4 mr-2" />
-                        {isSaving ? "Saving..." : "Save Privacy Settings"}
                       </Button>
                     </CardContent>
                   </Card>

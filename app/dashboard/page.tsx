@@ -3,12 +3,9 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AuthProvider } from "@/contexts/auth-context"
-import { ThemeProvider } from "@/contexts/theme-context"
+
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
-import { QuickStats } from "@/components/features/quick-stats"
 import { RecentFiles } from "@/components/features/recent-files"
-import { StorageUsage } from "@/components/features/storage-usage"
-import { ActivityFeed } from "@/components/features/activity-feed"
 import { FileUploadZone } from "@/components/features/file-upload-zone"
 import { ShareDialog } from "@/components/features/share-dialog"
 import { NotificationProvider } from "@/contexts/notification-context"
@@ -44,7 +41,6 @@ export default function DashboardPage() {
   }
 
   return (
-    <ThemeProvider>
       <AuthProvider>
         <NotificationProvider>
           <DashboardLayout>
@@ -54,9 +50,6 @@ export default function DashboardPage() {
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
                 <p className="text-gray-600 dark:text-gray-400">Manage your secure files and shares</p>
               </div>
-
-              {/* Quick Stats */}
-              <QuickStats />
 
               {/* Main Content Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -76,10 +69,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Sidebar */}
-                <div className="space-y-6">
-                  <StorageUsage />
-                  <ActivityFeed />
-                </div>
+                <div className="space-y-6"></div>
               </div>
 
               <ShareDialog open={shareDialogOpen} onOpenChange={setShareDialogOpen} fileName={selectedFileForShare} />
@@ -87,6 +77,5 @@ export default function DashboardPage() {
           </DashboardLayout>
         </NotificationProvider>
       </AuthProvider>
-    </ThemeProvider>
   )
 }

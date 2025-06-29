@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AuthProvider } from "@/contexts/auth-context"
-import { ThemeProvider } from "@/contexts/theme-context"
+
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -205,7 +205,6 @@ export default function FilesPage() {
   })
 
   return (
-    <ThemeProvider>
       <AuthProvider>
         <NotificationProvider>
           <DashboardLayout>
@@ -361,6 +360,5 @@ export default function FilesPage() {
           </DashboardLayout>
         </NotificationProvider>
       </AuthProvider>
-    </ThemeProvider>
   )
 }

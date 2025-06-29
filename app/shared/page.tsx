@@ -26,6 +26,10 @@ import {
 } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FilePreview } from "@/components/features/file-preview"
+import { AuthProvider } from "@/contexts/auth-context"
+
+import { NotificationProvider } from "@/contexts/notification-context"
+import { DashboardLayout } from "@/components/layout/dashboard-layout"
 
 interface SharedFile {
   id: string
@@ -107,130 +111,136 @@ const SharedPage = () => {
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">Shared Files</h2>
-          <p className="text-sm text-muted-foreground">Manage and view files shared by you and with you.</p>
-        </div>
-      </div>
-      <Tabs defaultValue="shared" className="mt-6">
-        <TabsList>
-          <TabsTrigger value="shared">Files I've Shared</TabsTrigger>
-          <TabsTrigger value="with-me">Files Shared with Me</TabsTrigger>
-        </TabsList>
-        <TabsContent value="shared" className="mt-4">
-          <Table>
-            <TableCaption>Files you have shared with others.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>File Name</TableHead>
-                <TableHead>Size</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Shared At</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((file) => (
-                <TableRow key={file.id}>
-                  <TableCell className="font-medium">{file.name}</TableCell>
-                  <TableCell>{file.size} MB</TableCell>
-                  <TableCell>{file.type}</TableCell>
-                  <TableCell>{file.sharedAt.toLocaleDateString()}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handlePreview(file)}>
-                          <Eye className="w-4 h-4 mr-2" />
-                          Preview
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => toast.success("Share dialog")}>
-                          <User className="w-4 h-4 mr-2" />
-                          Share
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => toast.success("Download started")}>
-                          <File className="w-4 h-4 mr-2" />
-                          Download
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={5}>Total {data.length} files shared.</TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TabsContent>
-        <TabsContent value="with-me" className="mt-4">
-          <Table>
-            <TableCaption>Files shared with you by others.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>File Name</TableHead>
-                <TableHead>Size</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Shared At</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((file) => (
-                <TableRow key={file.id}>
-                  <TableCell className="font-medium">{file.name}</TableCell>
-                  <TableCell>{file.size} MB</TableCell>
-                  <TableCell>{file.type}</TableCell>
-                  <TableCell>{file.sharedAt.toLocaleDateString()}</TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handlePreview(file)}>
-                          <Eye className="w-4 h-4 mr-2" />
-                          Preview
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => toast.success("Download started")}>
-                          <File className="w-4 h-4 mr-2" />
-                          Download
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={5}>Total {data.length} files shared with you.</TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TabsContent>
-      </Tabs>
-      <FilePreview
-        file={previewFile}
-        open={previewOpen}
-        onOpenChange={setPreviewOpen}
-        onShare={(fileName) => toast.success(`Share dialog for ${fileName}`)}
-        onDownload={(fileId) => toast.success("Download started")}
-      />
-    </div>
+      <AuthProvider>
+        <NotificationProvider>
+          <DashboardLayout>
+            <div className="container mx-auto py-10">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-semibold tracking-tight">Shared Files</h2>
+                  <p className="text-sm text-muted-foreground">Manage and view files shared by you and with you.</p>
+                </div>
+              </div>
+              <Tabs defaultValue="shared" className="mt-6">
+                <TabsList>
+                  <TabsTrigger value="shared">Files I've Shared</TabsTrigger>
+                  <TabsTrigger value="with-me">Files Shared with Me</TabsTrigger>
+                </TabsList>
+                <TabsContent value="shared" className="mt-4">
+                  <Table>
+                    <TableCaption>Files you have shared with others.</TableCaption>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>File Name</TableHead>
+                        <TableHead>Size</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Shared At</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {data.map((file) => (
+                        <TableRow key={file.id}>
+                          <TableCell className="font-medium">{file.name}</TableCell>
+                          <TableCell>{file.size} MB</TableCell>
+                          <TableCell>{file.type}</TableCell>
+                          <TableCell>{file.sharedAt.toLocaleDateString()}</TableCell>
+                          <TableCell className="text-right">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                  <span className="sr-only">Open menu</span>
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handlePreview(file)}>
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  Preview
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => toast.success("Share dialog")}>
+                                  <User className="w-4 h-4 mr-2" />
+                                  Share
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => toast.success("Download started")}>
+                                  <File className="w-4 h-4 mr-2" />
+                                  Download
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                    <TableFooter>
+                      <TableRow>
+                        <TableCell colSpan={5}>Total {data.length} files shared.</TableCell>
+                      </TableRow>
+                    </TableFooter>
+                  </Table>
+                </TabsContent>
+                <TabsContent value="with-me" className="mt-4">
+                  <Table>
+                    <TableCaption>Files shared with you by others.</TableCaption>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>File Name</TableHead>
+                        <TableHead>Size</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Shared At</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {data.map((file) => (
+                        <TableRow key={file.id}>
+                          <TableCell className="font-medium">{file.name}</TableCell>
+                          <TableCell>{file.size} MB</TableCell>
+                          <TableCell>{file.type}</TableCell>
+                          <TableCell>{file.sharedAt.toLocaleDateString()}</TableCell>
+                          <TableCell className="text-right">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                  <span className="sr-only">Open menu</span>
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handlePreview(file)}>
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  Preview
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => toast.success("Download started")}>
+                                  <File className="w-4 h-4 mr-2" />
+                                  Download
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                    <TableFooter>
+                      <TableRow>
+                        <TableCell colSpan={5}>Total {data.length} files shared with you.</TableCell>
+                      </TableRow>
+                    </TableFooter>
+                  </Table>
+                </TabsContent>
+              </Tabs>
+              <FilePreview
+                file={previewFile}
+                open={previewOpen}
+                onOpenChange={setPreviewOpen}
+                onShare={(fileName) => toast.success(`Share dialog for ${fileName}`)}
+                onDownload={(fileId) => toast.success("Download started")}
+              />
+            </div>
+          </DashboardLayout>
+        </NotificationProvider>
+      </AuthProvider>
   )
 }
 
